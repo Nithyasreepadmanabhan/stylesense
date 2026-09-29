@@ -21,7 +21,7 @@ services:
     region: oregon
 
     # Keep the service running
-    pythonVersion: 3.11
+    pythonVersion: 3.11.0
 
     # Health check
     healthCheckPath: /
