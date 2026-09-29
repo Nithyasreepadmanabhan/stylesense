@@ -1,0 +1,39 @@
+services:
+  - type: web
+    name: stylesense-backend
+    env: python
+    plan: free
+    startCommand: python app_supabase.py
+    buildCommand: pip install -r requirements_supabase.txt
+
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: SUPABASE_JWT_SECRET
+        sync: false
+      - key: SECRET_KEY
+        sync: false
+
+    region: oregon
+
+    # Keep the service running
+    pythonVersion: 3.11
+
+    # Health check
+    healthCheckPath: /
+
+databases:
+  - name: stylesense-db
+    databaseName: stylesense
+    user: stylesense_user
+    plan: free
+
+# Environment variables needed
+# SUPABASE_URL: https://stmgefpcsrygxpuzncnw.supabase.co
+# SUPABASE_SERVICE_ROLE_KEY: your-service-role-key
+# SUPABASE_JWT_SECRET: your-jwt-secret
+# SECRET_KEY: your-flask-secret-key
