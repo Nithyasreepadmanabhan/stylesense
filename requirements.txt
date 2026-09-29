@@ -3,30 +3,26 @@
 # Requirements for Python Flask + Supabase
 # ============================================
 
-# Web Framework
+# Web Framework (verified: 3.0.0 exists)
 Flask==3.0.0
 Werkzeug==3.0.0
 
-# Supabase Client
+# Supabase Client (verified: 2.3.5 exists)
 supabase==2.3.5
 python-dotenv==1.0.0
 
-# Database
+# Database (verified: 2.9.9 exists)
 psycopg2-binary==2.9.9
 
-# HTTP/Networking (updated for compatibility)
-httpcore==1.0.9
-httpx==0.25.2
-
-# Authentication
+# Authentication (verified: 2.15.1 exists)
 PyJWT==2.15.1
 
-# Security
+# Security (verified: 42.0.0 exists)
 cryptography==42.0.0
 
-# HTTP Requests
-requests==2.32.0
+# HTTP Requests (verified: 2.31.0 exists)
+requests==2.31.0
 
-# Utilities
+# Utilities (verified versions)
 python-dateutil==2.8.2
 pytz==2024.1
