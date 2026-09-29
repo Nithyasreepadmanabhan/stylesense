@@ -26,6 +26,3 @@ requests==2.31.0
 # Utilities
 python-dateutil==2.8.2
 pytz==2023.3
-
-# Optional: Email support
-python-email-validator==2.0.0
