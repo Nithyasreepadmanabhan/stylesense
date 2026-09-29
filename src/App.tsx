@@ -3,6 +3,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import { ToastProvider } from './context/ToastContext';
 import { Navbar } from './components/navigation/Navbar';
 import { Footer } from './components/navigation/Footer';
+import { LoginView } from './views/auth/LoginView';
 
 // User Views
 import { UserDashboard } from './views/user/UserDashboard';
@@ -105,12 +106,24 @@ const AppContent: React.FC = () => {
   );
 };
 
+const AppWrapper: React.FC = () => {
+  const { isAuthenticated } = useAuth();
+
+  if (!isAuthenticated) {
+    return <LoginView />;
+  }
+
+  return (
+    <ToastProvider>
+      <AppContent />
+    </ToastProvider>
+  );
+};
+
 export const App: React.FC = () => {
   return (
     <AuthProvider>
-      <ToastProvider>
-        <AppContent />
-      </ToastProvider>
+      <AppWrapper />
     </AuthProvider>
   );
 };
