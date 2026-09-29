@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
 import { dataService } from '../../services/dataService';
-import { WardrobeItem, ClothingCategory, ColorTone, SeasonType, OccasionType, StyleType, PatternType } from '../../types/wardrobe';
+import { WardrobeItem, ClothingCategory, ColorTone, SeasonType, OccasionType, StyleType, PatternType, WardrobeSubcategory } from '../../types/wardrobe';
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
 import { Badge } from '../../components/common/Badge';
@@ -45,7 +45,7 @@ export const WardrobeView: React.FC = () => {
   const [formData, setFormData] = useState({
     name: '',
     category: 'Top' as ClothingCategory,
-    subcategory: 'Shirt' as string,
+    subcategory: 'Shirt' as WardrobeSubcategory,
     brand: '',
     color: 'White' as ColorTone,
     secondaryColor: undefined as ColorTone | undefined,
