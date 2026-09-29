@@ -1,0 +1,71 @@
+{% extends "layout.html" %}
+
+{% block title %}Saved Outfits{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+        <div>
+            <h1 class="font-serif fw-bold mb-1">Saved Outfits Collection</h1>
+            <p class="text-muted small mb-0">Your favorite curated fashion combinations saved for quick reference.</p>
+        </div>
+        <a href="{{ url_for('style_ai') }}" class="btn btn-primary-custom">
+            <i class="bi bi-magic me-1"></i> Generate New Outfit
+        </a>
+    </div>
+
+    {% if saved_outfits %}
+    <div class="row g-4">
+        {% for outfit in saved_outfits %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card-custom h-100 p-4 d-flex flex-column">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="badge badge-category">{{ outfit.occasion or 'Casual' }}</span>
+                    <span class="badge badge-score small py-1 px-2">Score: {{ outfit.score }}/10</span>
+                </div>
+
+                <div class="mb-3">
+                    <span class="badge badge-color mb-2">{{ outfit.style or 'Casual' }} Style</span>
+                    <ul class="list-unstyled small mb-0">
+                        <li class="mb-1">
+                            <i class="bi bi-tag text-primary me-2"></i> <strong>Top:</strong> {{ outfit.top_name or 'Classic Top' }} {% if outfit.top_color %}({{ outfit.top_color }}){% endif %}
+                        </li>
+                        <li class="mb-1">
+                            <i class="bi bi-tag text-primary me-2"></i> <strong>Bottom:</strong> {{ outfit.bottom_name or 'Tailored Bottom' }} {% if outfit.bottom_color %}({{ outfit.bottom_color }}){% endif %}
+                        </li>
+                        <li class="mb-1">
+                            <i class="bi bi-tag text-primary me-2"></i> <strong>Shoes:</strong> {{ outfit.shoes_name or 'Versatile Shoes' }} {% if outfit.shoes_color %}({{ outfit.shoes_color }}){% endif %}
+                        </li>
+                        {% if outfit.acc_name %}
+                        <li class="mb-1">
+                            <i class="bi bi-tag text-primary me-2"></i> <strong>Accessory:</strong> {{ outfit.acc_name }}
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+
+                <div class="mt-auto pt-3 border-top d-flex justify-content-between align-items-center">
+                    <span class="small text-muted"><i class="bi bi-calendar3 me-1"></i> {{ outfit.created_at[:10] if outfit.created_at else 'Saved' }}</span>
+                    <a href="{{ url_for('delete_saved_outfit', outfit_id=outfit.id) }}" class="btn btn-sm btn-outline-danger px-3" onclick="return confirm('Remove this outfit from your saved collection?');">
+                        <i class="bi bi-trash me-1"></i> Delete
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="card-custom text-center py-5 p-4 my-4">
+        <i class="bi bi-heart display-3 text-muted mb-3 d-block"></i>
+        <h3 class="font-serif fw-bold">No saved outfits yet</h3>
+        <p class="text-muted mb-4">Generate outfits with Style AI and click "Save Outfit" to build your lookbook!</p>
+        <div>
+            <a href="{{ url_for('style_ai') }}" class="btn btn-primary-custom">
+                <i class="bi bi-magic me-1"></i> Launch Style AI Generator
+            </a>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

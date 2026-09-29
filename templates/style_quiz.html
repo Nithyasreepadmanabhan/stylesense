@@ -1,0 +1,213 @@
+{% extends "layout.html" %}
+
+{% block title %}Find My Style Quiz{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="text-center mb-4">
+        <h1 class="font-serif fw-bold mb-2">Find My Style Assessment</h1>
+        <p class="text-muted">Answer 5 quick questions to identify your personal fashion aesthetic archetype.</p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            
+            {% if result %}
+            <!-- QUIZ RESULT DISPLAY -->
+            <div class="card-custom p-4 p-md-5 text-center bg-white shadow-md">
+                <div class="bg-light d-inline-flex p-3 rounded-circle text-primary mb-3">
+                    <i class="bi bi-patch-check display-5 text-success"></i>
+                </div>
+                <span class="badge badge-custom bg-dark text-white mb-2">YOUR STYLE PERSONA</span>
+                <h1 class="display-5 font-serif fw-bold text-primary mb-3">{{ result|upper }}</h1>
+                
+                <p class="lead text-muted mb-4">
+                    {% if result == 'Minimalist' %}
+                        Your style is clean, simple, and sophisticated. You value crisp lines, neutral color palettes, and versatile essentials.
+                    {% elif result == 'Casual' %}
+                        Your style centers around comfort, practicality, and effortless daily elegance without looking overly dressed up.
+                    {% elif result == 'Elegant' %}
+                        Your style is refined, structured, and polished. You love tailored fits, premium fabrics, and timeless classic silhouettes.
+                    {% elif result == 'Streetwear' %}
+                        Your style is bold, expressive, and contemporary. You mix oversized fits, graphic statements, and premium sneakers.
+                    {% elif result == 'Sporty' %}
+                        Your style is active, energetic, and modern. You prefer flexible athletic fabrics, clean hoodies, and sleek trainers.
+                    {% else %}
+                        Your style is distinctive and expressive, reflecting vintage highlights and vibrant persona details.
+                    {% endif %}
+                </p>
+
+                <div class="row text-start g-3 mb-4">
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light rounded-3 border h-100">
+                            <h6 class="fw-bold mb-2"><i class="bi bi-palette text-primary me-2"></i> Recommended Colors</h6>
+                            <p class="small text-muted mb-0">
+                                {% if result == 'Minimalist' %}Black • White • Beige • Brown • Slate Grey{% else %}Neutral earth tones • Deep Navy • Crisp White • Olive Green{% endif %}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light rounded-3 border h-100">
+                            <h6 class="fw-bold mb-2"><i class="bi bi-bag-check text-primary me-2"></i> Wardrobe Essentials</h6>
+                            <p class="small text-muted mb-0">
+                                Straight Jeans • Linen Shirts • Tailored Trousers • Leather Sneakers • Blazers
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="{{ url_for('style_ai') }}" class="btn btn-primary-custom">
+                        <i class="bi bi-magic me-1"></i> Generate Outfit for {{ result }}
+                    </a>
+                    <a href="{{ url_for('style_quiz') }}" class="btn btn-outline-secondary rounded-pill">
+                        <i class="bi bi-arrow-repeat me-1"></i> Retake Quiz
+                    </a>
+                </div>
+            </div>
+
+            {% else %}
+            <!-- QUIZ QUESTION FORM -->
+            <div class="card-custom p-4 p-md-5">
+                <form action="{{ url_for('style_quiz') }}" method="POST">
+                    
+                    <!-- Question 1 -->
+                    <div class="quiz-question-block mb-4">
+                        <h5 class="fw-bold mb-3"><span class="badge bg-primary me-2">1</span> What do you usually prefer wearing?</h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="quiz-option">
+                                    <input type="radio" name="q1" value="Comfortable clothes" class="d-none" required>
+                                    <div class="fw-semibold">A. Comfortable clothes</div>
+                                    <div class="small text-muted">Soft tees, relaxed denim, cozy knits</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="quiz-option">
+                                    <input type="radio" name="q1" value="Elegant clothes" class="d-none">
+                                    <div class="fw-semibold">B. Elegant & Structured clothes</div>
+                                    <div class="small text-muted">Blazers, trousers, crisp button-downs</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="quiz-option">
+                                    <input type="radio" name="q1" value="Trendy clothes" class="d-none">
+                                    <div class="fw-semibold">C. Trendy & Statement clothes</div>
+                                    <div class="small text-muted">Oversized fits, graphics, bold silhouettes</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="quiz-option">
+                                    <input type="radio" name="q1" value="Sporty clothes" class="d-none">
+                                    <div class="fw-semibold">D. Sporty & Athletic clothes</div>
+                                    <div class="small text-muted">Joggers, athletic jackets, performance wear</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 2 -->
+                    <div class="quiz-question-block mb-4">
+                        <h5 class="fw-bold mb-3"><span class="badge bg-primary me-2">2</span> What color palette do you gravitate towards?</h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="quiz-option">
+                                    <input type="radio" name="q2" value="Neutral colors" class="d-none" required>
+                                    <div class="fw-semibold">A. Neutrals (White, Black, Beige, Brown)</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="quiz-option">
+                                    <input type="radio" name="q2" value="Vibrant colors" class="d-none">
+                                    <div class="fw-semibold">B. Vibrant & Expressive Colors</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="quiz-option">
+                                    <input type="radio" name="q2" value="Dark colors" class="d-none">
+                                    <div class="fw-semibold">C. Dark Tones (Black, Charcoal, Navy)</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="quiz-option">
+                                    <input type="radio" name="q2" value="Earthy tones" class="d-none">
+                                    <div class="fw-semibold">D. Earth Tones (Olive, Tan, Sand)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 3 -->
+                    <div class="quiz-question-block mb-4">
+                        <h5 class="fw-bold mb-3"><span class="badge bg-primary me-2">3</span> What is your go-to footwear choice?</h5>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="quiz-option">
+                                    <input type="radio" name="q3" value="Sneakers" class="d-none" required>
+                                    <div class="fw-semibold">Clean White Sneakers</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="quiz-option">
+                                    <input type="radio" name="q3" value="Boots" class="d-none">
+                                    <div class="fw-semibold">Leather Boots</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="quiz-option">
+                                    <input type="radio" name="q3" value="Loafers" class="d-none">
+                                    <div class="fw-semibold">Loafers / Oxfords</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 4 -->
+                    <div class="quiz-question-block mb-4">
+                        <h5 class="fw-bold mb-3"><span class="badge bg-primary me-2">4</span> What is your primary daily setting?</h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="quiz-option">
+                                    <input type="radio" name="q4" value="College / Campus" class="d-none" required>
+                                    <div class="fw-semibold">College / University Campus</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="quiz-option">
+                                    <input type="radio" name="q4" value="Office / Formal" class="d-none">
+                                    <div class="fw-semibold">Corporate / Professional Office</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 5 -->
+                    <div class="quiz-question-block mb-4">
+                        <h5 class="fw-bold mb-3"><span class="badge bg-primary me-2">5</span> Pick a design philosophy:</h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="quiz-option">
+                                    <input type="radio" name="q5" value="Clean & Simple" class="d-none" required>
+                                    <div class="fw-semibold">"Less is more — quality over quantity"</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="quiz-option">
+                                    <input type="radio" name="q5" value="Bold & Layered" class="d-none">
+                                    <div class="fw-semibold">"Fashion is art — express yourself!"</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary-custom w-100 py-3 mt-3">
+                        Submit & Reveal My Style Archetype <i class="bi bi-sparkles ms-2"></i>
+                    </button>
+                </form>
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+{% endblock %}

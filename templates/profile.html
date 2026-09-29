@@ -1,0 +1,105 @@
+{% extends "layout.html" %}
+
+{% block title %}My Profile & Style Preferences{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            
+            <!-- User Header Card -->
+            <div class="card-custom p-4 mb-4 bg-white">
+                <div class="row align-items-center">
+                    <div class="col-auto">
+                        <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold fs-2" style="width: 75px; height: 75px;">
+                            {{ user.name[0] if user and user.name else 'U' }}
+                        </div>
+                    </div>
+                    <div class="col">
+                        <h2 class="font-serif fw-bold mb-1">{{ user.name if user else session.user_name }}</h2>
+                        <p class="text-muted small mb-2"><i class="bi bi-envelope me-1"></i> {{ user.email if user else session.user_email }}</p>
+                        <span class="badge bg-dark text-white me-2">Style Archetype: {{ pref.style or 'Casual' }}</span>
+                        <span class="badge bg-light text-dark border">Member</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-4">
+                    <div class="metric-box">
+                        <div class="metric-number">{{ wardrobe_count }}</div>
+                        <div class="metric-label">Wardrobe Items</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="metric-box">
+                        <div class="metric-number">{{ saved_count }}</div>
+                        <div class="metric-label">Saved Outfits</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="metric-box">
+                        <div class="metric-number fs-3" style="min-height: 52px; display: flex; align-items: center; justify-content: center;">{{ pref.favorite_color or 'Blue' }}</div>
+                        <div class="metric-label">Favorite Color</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Style Preference Editor Form -->
+            <div class="card-custom p-4 p-md-5">
+                <h4 class="font-serif fw-bold mb-3 pb-2 border-bottom"><i class="bi bi-sliders text-primary me-2"></i> Update Style Preferences</h4>
+                
+                <form action="{{ url_for('profile') }}" method="POST">
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label" for="style">Primary Style Persona</label>
+                            <select class="form-select" id="style" name="style">
+                                {% for st in ['Casual', 'Minimalist', 'Elegant', 'Streetwear', 'Sporty', 'Traditional', 'Y2K'] %}
+                                <option value="{{ st }}" {% if pref.style == st %}selected{% endif %}>{{ st }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label" for="favorite_color">Favorite Accent Color</label>
+                            <select class="form-select" id="favorite_color" name="favorite_color">
+                                {% for col in ['White', 'Black', 'Blue', 'Beige', 'Brown', 'Green', 'Red', 'Pink', 'Yellow', 'Purple'] %}
+                                <option value="{{ col }}" {% if pref.favorite_color == col %}selected{% endif %}>{{ col }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label" for="preferred_fit">Preferred Clothing Fit</label>
+                            <select class="form-select" id="preferred_fit" name="preferred_fit">
+                                {% for fit in ['Slim', 'Regular', 'Oversized', 'Tailored', 'Relaxed'] %}
+                                <option value="{{ fit }}" {% if pref.preferred_fit == fit %}selected{% endif %}>{{ fit }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label" for="preferred_occasion">Primary Daily Occasion</label>
+                            <select class="form-select" id="preferred_occasion" name="preferred_occasion">
+                                {% for occ in ['College', 'Casual', 'Corporate', 'Workouts', 'Events'] %}
+                                <option value="{{ occ }}" {% if pref.preferred_occasion == occ %}selected{% endif %}>{{ occ }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end pt-3 border-top">
+                        <button type="submit" class="btn btn-primary-custom px-4">
+                            <i class="bi bi-save me-1"></i> Save Preferences
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

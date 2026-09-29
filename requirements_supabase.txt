@@ -1,0 +1,41 @@
+# ============================================
+# StyleSense Backend - Supabase Edition
+# Requirements for Python Flask + Supabase
+# ============================================
+
+# Web Framework
+Flask==2.3.0
+Werkzeug==2.3.0
+
+# Supabase Client
+supabase==2.0.2
+python-dotenv==1.0.0
+
+# Database
+psycopg2-binary==2.9.7
+
+# Authentication
+PyJWT==2.8.1
+
+# Security
+cryptography==41.0.0
+
+# HTTP Requests
+requests==2.31.0
+
+# Utilities
+python-dateutil==2.8.2
+pytz==2023.3
+
+# Optional: Email support
+python-email-validator==2.0.0
+
+# ============================================
+# Installation Instructions:
+# ============================================
+# pip install -r requirements_supabase.txt
+#
+# Or install individual packages:
+# pip install supabase python-dotenv Flask PyJWT
+#
+# ============================================

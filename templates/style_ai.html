@@ -1,0 +1,90 @@
+{% extends "layout.html" %}
+
+{% block title %}Style AI - Outfit Generator{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card-custom p-4 p-md-5">
+                <div class="text-center mb-4">
+                    <div class="bg-light d-inline-flex p-3 rounded-circle text-primary mb-3">
+                        <i class="bi bi-magic display-6 text-primary"></i>
+                    </div>
+                    <h1 class="font-serif fw-bold mb-2">Style AI Outfit Generator</h1>
+                    <p class="text-muted">Select your occasion, preferred aesthetic, and weather to get an optimized outfit combination from your wardrobe.</p>
+                </div>
+
+                <form action="{{ url_for('recommend_outfit') }}" method="POST">
+                    
+                    <!-- Occasion Selector -->
+                    <div class="mb-4">
+                        <label class="form-label mb-2"><i class="bi bi-geo-alt text-primary me-1"></i> What is the Occasion?</label>
+                        <div class="row g-2">
+                            {% for occ in ['College', 'Casual', 'Date', 'Party', 'Interview', 'Formal', 'Wedding', 'Travel', 'Festival'] %}
+                            <div class="col-md-4 col-6">
+                                <input type="radio" class="btn-check" name="occasion" id="occ_{{ occ }}" value="{{ occ }}" {% if loop.first %}checked{% endif %}>
+                                <label class="btn btn-outline-secondary w-100 py-2 rounded-3 text-start small fw-semibold" for="occ_{{ occ }}">
+                                    <i class="bi bi-tag-fill me-1 opacity-50"></i> {{ occ }}
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Style Aesthetic Selector -->
+                    <div class="mb-4">
+                        <label class="form-label mb-2"><i class="bi bi-palette text-primary me-1"></i> Desired Aesthetic / Style?</label>
+                        <div class="row g-2">
+                            {% for st in ['Casual', 'Minimal', 'Elegant', 'Streetwear', 'Sporty', 'Traditional', 'Korean', 'Y2K'] %}
+                            <div class="col-md-3 col-6">
+                                <input type="radio" class="btn-check" name="style" id="st_{{ st }}" value="{{ st }}" {% if st == 'Minimal' %}checked{% endif %}>
+                                <label class="btn btn-outline-secondary w-100 py-2 rounded-3 text-start small fw-semibold" for="st_{{ st }}">
+                                    <i class="bi bi-sparkles me-1 opacity-50"></i> {{ st }}
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Weather Selector -->
+                    <div class="mb-4">
+                        <label class="form-label mb-2"><i class="bi bi-cloud-sun text-primary me-1"></i> Current Weather?</label>
+                        <div class="row g-2">
+                            <div class="col-6 col-md-3">
+                                <input type="radio" class="btn-check" name="weather" id="w_hot" value="Hot">
+                                <label class="btn btn-outline-secondary w-100 py-2 rounded-3 small fw-semibold" for="w_hot">
+                                    ☀️ Hot / Sunny
+                                </label>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <input type="radio" class="btn-check" name="weather" id="w_normal" value="Normal" checked>
+                                <label class="btn btn-outline-secondary w-100 py-2 rounded-3 small fw-semibold" for="w_normal">
+                                    🌤️ Mild / Normal
+                                </label>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <input type="radio" class="btn-check" name="weather" id="w_cold" value="Cold">
+                                <label class="btn btn-outline-secondary w-100 py-2 rounded-3 small fw-semibold" for="w_cold">
+                                    ❄️ Cold / Chilly
+                                </label>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <input type="radio" class="btn-check" name="weather" id="w_rainy" value="Rainy">
+                                <label class="btn btn-outline-secondary w-100 py-2 rounded-3 small fw-semibold" for="w_rainy">
+                                    🌧️ Rainy / Wet
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary-custom w-100 py-3 mt-3">
+                        <i class="bi bi-magic me-2"></i> Generate Recommended Outfit
+                    </button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

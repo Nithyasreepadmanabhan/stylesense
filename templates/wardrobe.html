@@ -1,0 +1,145 @@
+{% extends "layout.html" %}
+
+{% block title %}Digital Wardrobe{% endblock %}
+
+{% block content %}
+<div class="container py-3">
+
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+        <div>
+            <h1 class="font-serif fw-bold mb-1">My Digital Wardrobe</h1>
+            <p class="text-muted small mb-0">Organize, filter, and track all your clothing pieces in one place.</p>
+        </div>
+        <div>
+            <a href="{{ url_for('add_clothing') }}" class="btn btn-primary-custom">
+                <i class="bi bi-plus-lg me-1"></i> Add New Clothing Item
+            </a>
+        </div>
+    </div>
+
+    <!-- Wardrobe Filter Bar -->
+    <div class="card-custom p-3 mb-4 bg-white">
+        <div class="row g-2 align-items-center">
+            <div class="col-md-3 col-6">
+                <label class="form-label mb-1">Category</label>
+                <select class="form-select form-select-sm" id="filterCategory">
+                    <option value="all">All Categories</option>
+                    <option value="Top">Tops</option>
+                    <option value="Bottom">Bottoms</option>
+                    <option value="Dress">Dresses</option>
+                    <option value="Jacket">Jackets</option>
+                    <option value="Shoes">Shoes</option>
+                    <option value="Accessories">Accessories</option>
+                    <option value="Bag">Bags</option>
+                </select>
+            </div>
+            
+            <div class="col-md-3 col-6">
+                <label class="form-label mb-1">Color</label>
+                <select class="form-select form-select-sm" id="filterColor">
+                    <option value="all">All Colors</option>
+                    <option value="White">White</option>
+                    <option value="Black">Black</option>
+                    <option value="Blue">Blue</option>
+                    <option value="Beige">Beige</option>
+                    <option value="Brown">Brown</option>
+                    <option value="Green">Green</option>
+                    <option value="Red">Red</option>
+                    <option value="Pink">Pink</option>
+                    <option value="Yellow">Yellow</option>
+                    <option value="Silver">Silver</option>
+                </select>
+            </div>
+
+            <div class="col-md-3 col-6">
+                <label class="form-label mb-1">Season</label>
+                <select class="form-select form-select-sm" id="filterSeason">
+                    <option value="all">All Seasons</option>
+                    <option value="Hot">Hot / Summer</option>
+                    <option value="Normal">Normal / Spring</option>
+                    <option value="Cold">Cold / Winter</option>
+                    <option value="Rainy">Rainy / Monsoon</option>
+                </select>
+            </div>
+
+            <div class="col-md-3 col-6">
+                <label class="form-label mb-1">Occasion</label>
+                <select class="form-select form-select-sm" id="filterOccasion">
+                    <option value="all">All Occasions</option>
+                    <option value="College">College</option>
+                    <option value="Casual">Casual</option>
+                    <option value="Date">Date</option>
+                    <option value="Party">Party</option>
+                    <option value="Interview">Interview</option>
+                    <option value="Formal">Formal</option>
+                    <option value="Wedding">Wedding</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wardrobe Items Grid -->
+    {% if items %}
+    <div class="row g-4" id="wardrobeContainer">
+        {% for item in items %}
+        <div class="col-lg-3 col-md-4 col-sm-6 wardrobe-item-card" 
+             data-category="{{ item.category }}" 
+             data-color="{{ item.color }}" 
+             data-season="{{ item.season }}" 
+             data-occasion="{{ item.occasion }}">
+            <div class="card-custom h-100">
+                <div class="card-img-wrapper">
+                    <img src="{{ url_for('static', filename='uploads/' + item.image) }}" 
+                         onerror="this.src='https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400'" 
+                         alt="{{ item.item_name }}">
+                </div>
+                <div class="p-3 d-flex flex-column h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="badge badge-category">{{ item.category }}</span>
+                        <span class="badge badge-color">{{ item.color }}</span>
+                    </div>
+                    
+                    <h5 class="fw-bold fs-6 mb-1 text-dark">{{ item.item_name }}</h5>
+                    
+                    <div class="small text-muted mb-3">
+                        <div><i class="bi bi-sun me-1"></i> {{ item.season }} Weather</div>
+                        <div><i class="bi bi-tag me-1"></i> {{ item.occasion }}</div>
+                    </div>
+
+                    <div class="mt-auto d-flex justify-content-between pt-2 border-top">
+                        <a href="{{ url_for('edit_clothing', item_id=item.id) }}" class="btn btn-sm btn-outline-secondary px-3">
+                            <i class="bi bi-pencil me-1"></i> Edit
+                        </a>
+                        <a href="{{ url_for('delete_clothing', item_id=item.id) }}" class="btn btn-sm btn-outline-danger px-3" onclick="return confirm('Are you sure you want to delete this item?');">
+                            <i class="bi bi-trash me-1"></i> Delete
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Empty Filter Search Result Notice -->
+    <div id="noMatchingItems" class="text-center py-5 bg-white rounded-3 border my-3" style="display: none;">
+        <i class="bi bi-search display-4 text-muted mb-3 d-block"></i>
+        <h4 class="fw-bold">No Items Match Selected Filters</h4>
+        <p class="text-muted small mb-3">Try adjusting your filter selection above.</p>
+        <button id="btnResetFilters" class="btn btn-sm btn-primary-custom">Reset All Filters</button>
+    </div>
+
+    {% else %}
+    <div class="card-custom text-center py-5 p-4 my-4">
+        <i class="bi bi-basket display-3 text-muted mb-3 d-block"></i>
+        <h3 class="font-serif fw-bold">Your wardrobe is empty</h3>
+        <p class="text-muted mb-4">Start by adding your favorite tops, bottoms, shoes, and accessories!</p>
+        <div>
+            <a href="{{ url_for('add_clothing') }}" class="btn btn-primary-custom">
+                <i class="bi bi-plus-lg me-1"></i> Add Your First Clothing Item
+            </a>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

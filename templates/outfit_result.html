@@ -1,0 +1,110 @@
+{% extends "layout.html" %}
+
+{% block title %}Your Recommended Outfit{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="text-center mb-4">
+        <span class="badge badge-score mb-2"><i class="bi bi-star-fill text-warning me-1"></i> Style Score: {{ score }}/10</span>
+        <h1 class="font-serif fw-bold display-6">✨ Your Recommended Outfit</h1>
+        <p class="text-muted">Tailored for <strong>{{ occasion }}</strong> • <strong>{{ style }} Aesthetic</strong> • <strong>{{ weather }} Weather</strong></p>
+    </div>
+
+    <!-- Outfit Items Grid -->
+    <div class="row g-4 justify-content-center mb-4">
+        <!-- Top -->
+        <div class="col-md-3 col-6">
+            <div class="card-custom h-100 p-3 text-center">
+                <div class="card-img-wrapper mb-3" style="height: 180px;">
+                    <img src="{{ url_for('static', filename='uploads/' + top.image) }}" 
+                         onerror="this.src='https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=400'" 
+                         alt="{{ top.item_name }}">
+                </div>
+                <span class="badge badge-category mb-1">TOP</span>
+                <h6 class="fw-bold mb-1">{{ top.item_name }}</h6>
+                <span class="small text-muted">{{ top.color }} • {{ top.pattern }}</span>
+            </div>
+        </div>
+
+        <!-- Bottom -->
+        <div class="col-md-3 col-6">
+            <div class="card-custom h-100 p-3 text-center">
+                <div class="card-img-wrapper mb-3" style="height: 180px;">
+                    <img src="{{ url_for('static', filename='uploads/' + bottom.image) }}" 
+                         onerror="this.src='https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=400'" 
+                         alt="{{ bottom.item_name }}">
+                </div>
+                <span class="badge badge-category mb-1">BOTTOM</span>
+                <h6 class="fw-bold mb-1">{{ bottom.item_name }}</h6>
+                <span class="small text-muted">{{ bottom.color }} • {{ bottom.pattern }}</span>
+            </div>
+        </div>
+
+        <!-- Shoes -->
+        <div class="col-md-3 col-6">
+            <div class="card-custom h-100 p-3 text-center">
+                <div class="card-img-wrapper mb-3" style="height: 180px;">
+                    <img src="{{ url_for('static', filename='uploads/' + shoes.image) }}" 
+                         onerror="this.src='https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400'" 
+                         alt="{{ shoes.item_name }}">
+                </div>
+                <span class="badge badge-category mb-1">SHOES</span>
+                <h6 class="fw-bold mb-1">{{ shoes.item_name }}</h6>
+                <span class="small text-muted">{{ shoes.color }}</span>
+            </div>
+        </div>
+
+        <!-- Accessory / Layer -->
+        {% if accessory %}
+        <div class="col-md-3 col-6">
+            <div class="card-custom h-100 p-3 text-center">
+                <div class="card-img-wrapper mb-3" style="height: 180px;">
+                    <img src="{{ url_for('static', filename='uploads/' + accessory.image) }}" 
+                         onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400'" 
+                         alt="{{ accessory.item_name }}">
+                </div>
+                <span class="badge badge-category mb-1">ACCESSORY</span>
+                <h6 class="fw-bold mb-1">{{ accessory.item_name }}</h6>
+                <span class="small text-muted">{{ accessory.color }}</span>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Why It Works Breakdown Box -->
+    <div class="row justify-content-center mb-4">
+        <div class="col-lg-8">
+            <div class="card-custom p-4 bg-white border-start border-primary border-4">
+                <h5 class="fw-bold font-serif text-dark mb-2"><i class="bi bi-lightbulb-fill text-warning me-2"></i> Why It Works</h5>
+                <p class="text-muted mb-0">{{ why_it_works }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="d-flex flex-wrap justify-content-center gap-3">
+        <form action="{{ url_for('save_outfit') }}" method="POST">
+            <input type="hidden" name="top_id" value="{{ top.id }}">
+            <input type="hidden" name="bottom_id" value="{{ bottom.id }}">
+            <input type="hidden" name="shoes_id" value="{{ shoes.id }}">
+            <input type="hidden" name="accessory_id" value="{{ accessory.id if accessory else 0 }}">
+            <input type="hidden" name="occasion" value="{{ occasion }}">
+            <input type="hidden" name="style" value="{{ style }}">
+            <input type="hidden" name="score" value="{{ score }}">
+            
+            <button type="submit" class="btn btn-primary-custom px-4 py-2">
+                <i class="bi bi-heart-fill me-2"></i> Save Outfit
+            </button>
+        </form>
+
+        <a href="{{ url_for('recommend_outfit', occasion=occasion, style=style, weather=weather) }}" class="btn btn-outline-custom px-4 py-2">
+            <i class="bi bi-arrow-repeat me-2"></i> Try Another
+        </a>
+
+        <a href="{{ url_for('style_ai') }}" class="btn btn-outline-secondary rounded-pill px-4 py-2">
+            <i class="bi bi-sliders me-2"></i> Change Filters
+        </a>
+    </div>
+
+</div>
+{% endblock %}

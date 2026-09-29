@@ -1,0 +1,100 @@
+{% extends "layout.html" %}
+
+{% block title %}Outfit Analyzer{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="text-center mb-4">
+        <h1 class="font-serif fw-bold mb-2">Outfit Analyzer</h1>
+        <p class="text-muted">Analyze your outfit color combination & occasion appropriateness to receive a instant score and fashion critique.</p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            
+            <div class="card-custom p-4 p-md-5 mb-4">
+                <form action="{{ url_for('outfit_analyzer') }}" method="POST">
+                    
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label" for="top_color">Top Color</label>
+                            <select class="form-select" id="top_color" name="top_color">
+                                {% for col in ['White', 'Black', 'Blue', 'Beige', 'Brown', 'Green', 'Red', 'Pink', 'Yellow', 'Purple'] %}
+                                <option value="{{ col }}" {% if result and result.top_color == col %}selected{% endif %}>{{ col }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <label class="form-label" for="bottom_color">Bottom Color</label>
+                            <select class="form-select" id="bottom_color" name="bottom_color">
+                                {% for col in ['Blue', 'Black', 'Beige', 'White', 'Brown', 'Green', 'Grey'] %}
+                                <option value="{{ col }}" {% if result and result.bottom_color == col %}selected{% endif %}>{{ col }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label" for="shoes_color">Shoe Color</label>
+                            <select class="form-select" id="shoes_color" name="shoes_color">
+                                {% for col in ['White', 'Black', 'Brown', 'Beige', 'Blue'] %}
+                                <option value="{{ col }}" {% if result and result.shoes_color == col %}selected{% endif %}>{{ col }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label" for="occasion">Target Occasion</label>
+                        <select class="form-select" id="occasion" name="occasion">
+                            {% for occ in ['College', 'Casual', 'Date', 'Party', 'Interview', 'Formal', 'Wedding'] %}
+                            <option value="{{ occ }}" {% if result and result.occasion == occ %}selected{% endif %}>{{ occ }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary-custom w-100 py-3">
+                        <i class="bi bi-award me-2"></i> Analyze My Outfit Combination
+                    </button>
+                </form>
+            </div>
+
+            {% if result %}
+            <div class="card-custom p-4 p-md-5 bg-white border-top border-primary border-4 animate-fade-in">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3 class="font-serif fw-bold mb-0">Analysis Result</h3>
+                    <span class="badge badge-score fs-5 py-2 px-3">Outfit Score: {{ result.score }}/10 ⭐</span>
+                </div>
+
+                <p class="text-muted small mb-4">
+                    Target: <strong>{{ result.occasion }}</strong> • Colors: <strong>{{ result.top_color }} Top + {{ result.bottom_color }} Bottom + {{ result.shoes_color }} Shoes</strong>
+                </p>
+
+                {% if result.pros %}
+                <div class="mb-3">
+                    <h6 class="fw-bold text-success mb-2"><i class="bi bi-check-circle-fill me-2"></i> Strengths & Color Highlights</h6>
+                    <ul class="list-group list-group-flush mb-0">
+                        {% for pro in result.pros %}
+                        <li class="list-group-item bg-transparent px-0 text-dark small"><i class="bi bi-check2 text-success me-2"></i> {{ pro }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+
+                {% if result.suggestions %}
+                <div>
+                    <h6 class="fw-bold text-primary mb-2"><i class="bi bi-lightbulb-fill me-2"></i> Pro Styling Suggestions</h6>
+                    <ul class="list-group list-group-flush mb-0">
+                        {% for sug in result.suggestions %}
+                        <li class="list-group-item bg-transparent px-0 text-dark small"><i class="bi bi-arrow-right-short text-primary me-2"></i> {{ sug }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends "layout.html" %}
+
+{% block title %}Color Assistant{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="text-center mb-4">
+        <h1 class="font-serif fw-bold mb-2">Color Harmony Assistant</h1>
+        <p class="text-muted">Master color coordination. Select a base clothing color to view recommended color matches.</p>
+    </div>
+
+    <!-- Color Palette Selection Swatches -->
+    <div class="card-custom p-4 mb-4 text-center">
+        <h6 class="form-label mb-3">Choose Your Base Color:</h6>
+        <div class="d-flex flex-wrap justify-content-center gap-3">
+            {% set color_hexes = {
+                'White': '#FFFFFF',
+                'Black': '#1A1A1A',
+                'Blue': '#2B5B84',
+                'Beige': '#E2D1C3',
+                'Brown': '#795548',
+                'Green': '#4A6B53',
+                'Red': '#C0392B',
+                'Pink': '#E8A598',
+                'Yellow': '#F39C12',
+                'Purple': '#8E44AD'
+            } %}
+            
+            {% for c in all_colors %}
+            <div class="text-center">
+                <button class="color-swatch-btn {% if c == selected_color %}active{% endif %}" 
+                        data-color-name="{{ c }}"
+                        style="background-color: {{ color_hexes.get(c, '#CCCCCC') }}; {% if c == 'White' %}border: 2px solid #DDD;{% endif %}">
+                    {% if c == selected_color %}
+                        <i class="bi bi-check-lg {% if c in ['White', 'Beige', 'Yellow', 'Pink'] %}text-dark{% else %}text-white{% endif %} fs-4"></i>
+                    {% endif %}
+                </button>
+                <div class="small fw-semibold mt-1">{{ c }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Selected Color Results Card -->
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card-custom p-4 p-md-5">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="rounded-circle p-3 me-3 border shadow-sm" style="background-color: {{ color_hexes.get(selected_color, '#CCCCCC') }}; width: 60px; height: 60px;"></div>
+                    <div>
+                        <h2 class="font-serif fw-bold mb-0">Base Color: {{ selected_color }}</h2>
+                        <span class="badge bg-light text-dark border">Color Coordination Guide</span>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <h5 class="fw-bold mb-2">Best Matching Colors:</h5>
+                    <div class="d-flex flex-wrap gap-2">
+                        {% for match in palette_info.matches %}
+                        <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 fs-6 px-3 py-2 rounded-pill">
+                            ✓ {{ match }}
+                        </span>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="p-3 bg-light rounded-3 mb-4 border">
+                    <h6 class="fw-bold mb-1"><i class="bi bi-info-circle text-primary me-2"></i> Styling Insight</h6>
+                    <p class="text-muted mb-0 small">{{ palette_info.description }}</p>
+                </div>
+
+                <div class="p-3 bg-surface rounded-3 border">
+                    <h6 class="fw-bold mb-1"><i class="bi bi-stars text-warning me-2"></i> Recommended Combination</h6>
+                    <p class="fw-semibold text-dark mb-0">{{ palette_info.outfit_example }}</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
